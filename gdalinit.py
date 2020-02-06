@@ -31,10 +31,10 @@ __version__ = _gdal.__version__ = _gdal.VersionInfo("RELEASE_NAME")
 if 'GDAL_DATA' not in os.environ:
     whl_datadir = os.path.abspath(os.path.join(os.path.dirname(__file__), "gdal_data"))
     share_datadir = os.path.join(sys.prefix, 'share/gdal')
-    if os.path.exists(os.path.join(whl_datadir, 'pcs.csv')):
+    if os.path.exists(os.path.join(whl_datadir, 'epsg.wkt')):
         os.environ['GDAL_DATA'] = whl_datadir
-    elif os.path.exists(os.path.join(share_datadir, 'pcs.csv')):
+    elif os.path.exists(os.path.join(share_datadir, 'epsg.wkt')):
         os.environ['GDAL_DATA'] = share_datadir
-    if 'PROJ_LIB' not in os.environ:
-        whl_datadir = os.path.abspath(os.path.join(os.path.dirname(__file__), "proj_data"))
-        os.environ['PROJ_LIB'] = whl_datadir
+if 'PROJ_LIB' not in os.environ:
+    whl_datadir = os.path.abspath(os.path.join(os.path.dirname(__file__), "proj_data"))
+    os.environ['PROJ_LIB'] = whl_datadir
