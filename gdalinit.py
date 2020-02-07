@@ -35,6 +35,6 @@ if 'GDAL_DATA' not in os.environ:
         os.environ['GDAL_DATA'] = whl_datadir
     elif os.path.exists(os.path.join(share_datadir, 'pcs.csv')):
         os.environ['GDAL_DATA'] = share_datadir
-    if 'PROJ_LIB' not in os.environ:
-        whl_datadir = os.path.abspath(os.path.join(os.path.dirname(__file__), "proj_data"))
-        os.environ['PROJ_LIB'] = whl_datadir
+if 'PROJ_LIB' not in os.environ:
+    whl_datadir = os.path.abspath(os.path.join(os.path.dirname(__file__), "proj_data"))
+    os.environ['PROJ_LIB'] = whl_datadir
