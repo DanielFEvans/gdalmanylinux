@@ -63,9 +63,9 @@ RUN mkdir -p /src \
 # proj4
 RUN mkdir -p /src \
     && cd /src \
-    && curl -f -L -O http://download.osgeo.org/proj/proj-6.3.0.tar.gz \
-    && tar xzf proj-6.3.0.tar.gz \
-    && cd /src/proj-6.3.0 \
+    && curl -f -L -O http://download.osgeo.org/proj/proj-6.2.1.tar.gz \
+    && tar xzf proj-6.2.1.tar.gz \
+    && cd /src/proj-6.2.1 \
     && ./configure CFLAGS="-O2 -Wl,-S" \
     && make -j 4 \
     && make install \
@@ -128,6 +128,13 @@ RUN cd /usr/local/src \
     && make -j 4 \
     && make install
 
+## FileGDB
+run cd /usr/local/src \
+    && curl -f -L -O https://github.com/Esri/file-geodatabase-api/raw/master/FileGDB_API_1.5.1/FileGDB_API_1_5_1-64.tar.gz \
+    && tar xzf FileGDB_API_1_5_1-64.tar.gz \
+    && cp FileGDB_API-64/lib/* /usr/local/lib \
+    && ldconfig
+
 # gdal
 RUN mkdir -p /src \
     && cd /src \
@@ -166,6 +173,7 @@ RUN mkdir -p /src \
         --without-python \
         --without-hdf4 \
         --without-hdf5 \
+        --with-fgdb=/usr/local/src/FileGDB_API-64 \
     && make -j 4 \
     && make install
 
