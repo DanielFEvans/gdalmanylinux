@@ -14,6 +14,11 @@ RUN sed -i 's/enabled=1/enabled=0/' /etc/yum/pluginconf.d/fastestmirror.conf \
 
 RUN yum update -y && yum install -y curl-devel json-c-devel zlib-devel libtiff-devel
 
+# The venerable proc02 and proc04 support the following
+# They do not support -mavx or newer
+ARG CFLAGS="-O2 -Wl,-S -m64 -mmmx -msse -msse2 -msse3 -mssse3 -msse4.1 -msse4.2 -mfpmath=sse -mtune=core-avx2 -pipe"
+ARG CXXFLAGS="-O2 -Wl,-S -m64 -mmmx -msse -msse2 -msse3 -mssse3 -msse4.1 -msse4.2 -mfpmath=sse -mtune=core-avx2 -pipe"
+
 # Install openssl
 RUN mkdir -p /src \
     && cd /src \
@@ -23,7 +28,7 @@ RUN mkdir -p /src \
     && tar zxf openssl-1.0.2o.tar.gz \
     && cd /src/openssl-1.0.2o \
     && ./config no-shared no-ssl2 no-async -fPIC -O2 \
-    && make -j 4 \
+    && make -j 8 \
     && make install \
     && rm -rf /src
 
@@ -33,8 +38,8 @@ RUN mkdir -p /src \
     && curl -f -L -O http://curl.askapache.com/download/curl-7.59.0.tar.bz2 \
     && tar jxf curl-7.59.0.tar.bz2 \
     && cd /src/curl-7.59.0 \
-    && LIBS=-ldl CFLAGS="-O2 -Wl,-S" ./configure --with-ssl=/usr/local/ssl \
-    && make -j 4 \
+    && LIBS=-ldl ./configure --with-ssl=/usr/local/ssl \
+    && make -j 8 \
     && make install \
     && rm -rf /src
 
@@ -44,8 +49,8 @@ RUN mkdir -p /src \
     && curl -f -L -O http://download.osgeo.org/geos/geos-3.8.0.tar.bz2 \
     && tar jxf geos-3.8.0.tar.bz2 \
     && cd /src/geos-3.8.0 \
-    && CFLAGS="-O2 -Wl,-S" CXXFLAGS="-O2 -Wl,-S" ./configure \
-    && make -j 4 \
+    && ./configure \
+    && make -j 8 \
     && make install \
     && rm -rf /src
 
@@ -56,7 +61,7 @@ RUN mkdir -p /src \
     && tar xzf jasper-1.900.1.uuid.tar.gz \
     && cd /src/jasper-1.900.1.uuid \
     && ./configure --disable-debug --enable-shared \
-    && make -j 4 \
+    && make -j 8 \
     && make install \
     && rm -rf /src
 
@@ -66,8 +71,8 @@ RUN mkdir -p /src \
     && curl -f -L -O http://download.osgeo.org/proj/proj-6.2.1.tar.gz \
     && tar xzf proj-6.2.1.tar.gz \
     && cd /src/proj-6.2.1 \
-    && ./configure CFLAGS="-O2 -Wl,-S" \
-    && make -j 4 \
+    && ./configure  \
+    && make -j 8 \
     && make install \
     && rm -rf /src
 
@@ -77,7 +82,7 @@ RUN cd /usr/local/src \
     && tar xzf cmake-3.11.1.tar.gz \
     && cd cmake-3.11.1 \
     && ./bootstrap --prefix=/usr/local/cmake \
-    && make -j 4; make install
+    && make -j 8; make install
 
 # openjpeg
 RUN mkdir -p /src \
@@ -88,7 +93,7 @@ RUN mkdir -p /src \
     && mkdir -p build \
     && cd build \
     && /usr/local/cmake/bin/cmake .. -DBUILD_THIRDPARTY:BOOL=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr/local \
-    && make -j 4 install \
+    && make -j 8 install \
     && make clean \
     && rm -rf /src
 
@@ -97,8 +102,8 @@ RUN cd /usr/local/src \
     && curl -f -L -O https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/hdf5-1.10.2/src/hdf5-1.10.2.tar.gz \
     && tar xzf hdf5-1.10.2.tar.gz \
     && cd hdf5-1.10.2 \
-    && ./configure --prefix=/usr/local --enable-shared --enable-build-mode=production CFLAGS="-O2 -Wl,-S" \
-    && make -j 4 \
+    && ./configure --prefix=/usr/local --enable-shared --enable-build-mode=production  \
+    && make -j 8 \
     && make install
 
 ## netcdf
@@ -107,7 +112,7 @@ RUN cd /usr/local/src \
     && tar xzf v4.6.1.tar.gz \
     && cd netcdf-c-4.6.1 \
     && CFLAGS="-I/usr/local/include -O2 -Wl,-S" CXXFLAGS="-I/usr/local/include -O2 -Wl,-S" LDFLAGS="-L/usr/local/lib" ./configure \
-    && make -j 4 \
+    && make -j 8 \
     && make install
 
 ## expat
@@ -115,8 +120,8 @@ RUN cd /usr/local/src \
     && curl -f -L -O https://github.com/libexpat/libexpat/releases/download/R_2_2_5/expat-2.2.5.tar.bz2 \
     && tar xjf expat-2.2.5.tar.bz2 \
     && cd expat-2.2.5 \
-    && CFLAGS="-O2 -Wl,-S" ./configure --prefix=/usr/local \
-    && make -j 4 \
+    &&  ./configure --prefix=/usr/local \
+    && make -j 8 \
     && make install
 
 ## webp
@@ -124,8 +129,8 @@ RUN cd /usr/local/src \
     && curl -f -L -O https://storage.googleapis.com/downloads.webmproject.org/releases/webp/libwebp-0.6.1.tar.gz \
     && tar xzf libwebp-0.6.1.tar.gz \
     && cd libwebp-0.6.1 \
-    && CFLAGS="-O2 -Wl,-S" ./configure --prefix=/usr/local \
-    && make -j 4 \
+    &&  ./configure --prefix=/usr/local \
+    && make -j 8 \
     && make install
 
 ## FileGDB
@@ -141,7 +146,7 @@ RUN mkdir -p /src \
     && curl -f -L -O http://download.osgeo.org/gdal/3.0.4/gdal-3.0.4.tar.gz \
     && tar xzf gdal-3.0.4.tar.gz \
     && cd /src/gdal-3.0.4 \
-    && CFLAGS="-O2 -Wl,-S" CXXFLAGS="-O2 -Wl,-S" ./configure \
+    &&  ./configure \
         --with-threads \
         --disable-debug \
         --disable-static \
@@ -174,7 +179,7 @@ RUN mkdir -p /src \
         --without-hdf4 \
         --without-hdf5 \
         --with-fgdb=/usr/local/src/FileGDB_API-64 \
-    && make -j 4 \
+    && make -j 8 \
     && make install
 
 # Bake dev requirements into the Docker image for faster builds
