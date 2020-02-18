@@ -120,7 +120,7 @@ RUN cd /usr/local/src \
     && curl -f -L -O https://github.com/libexpat/libexpat/releases/download/R_2_2_5/expat-2.2.5.tar.bz2 \
     && tar xjf expat-2.2.5.tar.bz2 \
     && cd expat-2.2.5 \
-    &&  ./configure --prefix=/usr/local \
+    && ./configure --prefix=/usr/local \
     && make -j 8 \
     && make install
 
@@ -129,7 +129,7 @@ RUN cd /usr/local/src \
     && curl -f -L -O https://storage.googleapis.com/downloads.webmproject.org/releases/webp/libwebp-0.6.1.tar.gz \
     && tar xzf libwebp-0.6.1.tar.gz \
     && cd libwebp-0.6.1 \
-    &&  ./configure --prefix=/usr/local \
+    && ./configure --prefix=/usr/local \
     && make -j 8 \
     && make install
 
@@ -146,7 +146,7 @@ RUN mkdir -p /src \
     && curl -f -L -O http://download.osgeo.org/gdal/3.0.4/gdal-3.0.4.tar.gz \
     && tar xzf gdal-3.0.4.tar.gz \
     && cd /src/gdal-3.0.4 \
-    &&  ./configure \
+    && ./configure \
         --with-threads \
         --disable-debug \
         --disable-static \
