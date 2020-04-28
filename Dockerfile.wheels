@@ -46,9 +46,9 @@ RUN mkdir -p /src \
 # Install geos
 RUN mkdir -p /src \
     && cd /src \
-    && curl -f -L -O http://download.osgeo.org/geos/geos-3.8.0.tar.bz2 \
-    && tar jxf geos-3.8.0.tar.bz2 \
-    && cd /src/geos-3.8.0 \
+    && curl -f -L -O http://download.osgeo.org/geos/geos-3.8.1.tar.bz2 \
+    && tar jxf geos-3.8.1.tar.bz2 \
+    && cd /src/geos-3.8.1 \
     && ./configure \
     && make -j 8 \
     && make install \
