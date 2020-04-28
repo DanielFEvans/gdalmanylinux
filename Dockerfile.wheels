@@ -46,9 +46,9 @@ RUN mkdir -p /src \
 # Install geos
 RUN mkdir -p /src \
     && cd /src \
-    && curl -f -L -O http://download.osgeo.org/geos/geos-3.8.0.tar.bz2 \
-    && tar jxf geos-3.8.0.tar.bz2 \
-    && cd /src/geos-3.8.0 \
+    && curl -f -L -O http://download.osgeo.org/geos/geos-3.8.1.tar.bz2 \
+    && tar jxf geos-3.8.1.tar.bz2 \
+    && cd /src/geos-3.8.1 \
     && ./configure \
     && make -j 8 \
     && make install \
@@ -146,9 +146,9 @@ RUN /usr/local/bin/geos-config --includes
 # gdal
 RUN mkdir -p /src \
     && cd /src \
-    && curl -f -L -O http://download.osgeo.org/gdal/3.1.0/gdal-3.1.0rc1.tar.gz \
-    && tar xzf gdal-3.1.0rc1.tar.gz \
-    && cd /src/gdal-3.1.0 \
+    && curl -f -L -O http://download.osgeo.org/gdal/3.0.4/gdal-3.0.4.tar.gz \
+    && tar xzf gdal-3.0.4.tar.gz \
+    && cd /src/gdal-3.0.4 \
     && ./configure \
         --with-threads \
         --disable-debug \
