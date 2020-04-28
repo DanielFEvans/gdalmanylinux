@@ -5,3 +5,8 @@ SHELL = /bin/bash
 wheels: Dockerfile.wheels build-linux-wheels.sh
 	docker build -f Dockerfile.wheels -t gdal-wheelbuilder .
 	docker run -v `pwd`:/io gdal-wheelbuilder
+
+wheels-from-source: Dockerfile.wheels build-linux-wheels.sh
+	docker build -f Dockerfile.wheels_source -t gdal-wheelbuilder .
+	docker run -v `pwd`:/io gdal-wheelbuilder
+

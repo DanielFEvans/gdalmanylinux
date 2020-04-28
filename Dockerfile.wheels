@@ -21,15 +21,15 @@ ARG CXXFLAGS="-O2 -Wl,-S -m64 -mmmx -msse -msse2 -msse3 -mssse3 -msse4.1 -msse4.
 
 # Install openssl
 RUN mkdir -p /src \
-    && cd /src \
-    && curl -f -L -O https://www.openssl.org/source/openssl-1.0.2o.tar.gz \
-    && echo "ec3f5c9714ba0fd45cb4e087301eb1336c317e0d20b575a125050470e8089e4d  openssl-1.0.2o.tar.gz" > checksum \
-    && sha256sum -c checksum \
-    && tar zxf openssl-1.0.2o.tar.gz \
-    && cd /src/openssl-1.0.2o \
-    && ./config no-shared no-ssl2 no-async -fPIC -O2 \
-    && make -j 8 \
-    && make install \
+    && cd /src \ 
+    && curl -f -L -O https://ftp.openssl.org/source/old/1.0.2/openssl-1.0.2u.tar.gz \
+    && echo "ecd0c6ffb493dd06707d38b14bb4d8c2288bb7033735606569d8f90f89669d16  openssl-1.0.2u.tar.gz" > checksum \
+    && sha256sum -c checksum \ 
+    && tar zxf openssl-1.0.2u.tar.gz \ 
+    && cd /src/openssl-1.0.2u \ 
+    && ./config no-shared no-ssl2 no-async -fPIC -O2 \ 
+    && make -j 8 \ 
+    && make install \ 
     && rm -rf /src
 
 # Install curl
@@ -134,18 +134,21 @@ RUN cd /usr/local/src \
     && make install
 
 ## FileGDB
-run cd /usr/local/src \
+RUN cd /usr/local/src \
     && curl -f -L -O https://github.com/Esri/file-geodatabase-api/raw/master/FileGDB_API_1.5.1/FileGDB_API_1_5_1-64.tar.gz \
     && tar xzf FileGDB_API_1_5_1-64.tar.gz \
     && cp FileGDB_API-64/lib/* /usr/local/lib \
     && ldconfig
 
+RUN /usr/local/bin/geos-config --version
+RUN /usr/local/bin/geos-config --includes
+
 # gdal
 RUN mkdir -p /src \
     && cd /src \
-    && curl -f -L -O http://download.osgeo.org/gdal/3.0.4/gdal-3.0.4.tar.gz \
-    && tar xzf gdal-3.0.4.tar.gz \
-    && cd /src/gdal-3.0.4 \
+    && curl -f -L -O http://download.osgeo.org/gdal/3.1.0/gdal-3.1.0rc1.tar.gz \
+    && tar xzf gdal-3.1.0rc1.tar.gz \
+    && cd /src/gdal-3.1.0 \
     && ./configure \
         --with-threads \
         --disable-debug \
