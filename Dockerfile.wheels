@@ -136,8 +136,8 @@ RUN /usr/local/bin/geos-config --includes
 # gdal
 RUN mkdir -p /src \
     && cd /src \
-    && curl -f -L -O http://download.osgeo.org/gdal/3.1.0/gdal-3.1.0rc1.tar.gz \
-    && tar xzf gdal-3.1.0rc1.tar.gz \
+    && curl -f -L -O http://download.osgeo.org/gdal/3.1.0/gdal-3.1.0rc2.tar.gz \
+    && tar xzf gdal-3.1.0rc2.tar.gz \
     && cd /src/gdal-3.1.0 \
     && ./configure \
         --with-threads \
