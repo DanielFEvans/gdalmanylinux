@@ -271,8 +271,6 @@ if HAVE_NUMPY:
 
 packages = ["osgeo",]
 
-readme = str(open('README.md','rb').read())
-
 name = 'GDAL'
 version = gdal_version
 author = "Frank Warmerdam"
@@ -317,7 +315,6 @@ if HAVE_SETUPTOOLS:
            author_email = author_email,
            maintainer = maintainer,
            maintainer_email = maintainer_email,
-           long_description = readme,
            description = description,
            license = license,
            classifiers = classifiers,
@@ -339,7 +336,6 @@ else:
            author_email = author_email,
            maintainer = maintainer,
            maintainer_email = maintainer_email,
-           long_description = readme,
            description = description,
            license = license,
            classifiers = classifiers,

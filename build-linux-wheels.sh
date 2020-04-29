@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-GDAL_BUILD_PATH=/src/gdal-3.1.0rc2/swig/python
+GDAL_BUILD_PATH=/src/gdal-3.1.0/swig/python
 ORIGINAL_PATH=$PATH
 UNREPAIRED_WHEELS=/tmp/wheels
 
@@ -13,6 +13,8 @@ pushd ${GDAL_BUILD_PATH}
 for PYBIN in /opt/python/*/bin; do
     if [[ $PYBIN == *"26"* ]]; then continue; fi
     if [[ $PYBIN == *"33"* ]]; then continue; fi
+    if [[ $PYBIN == *"34"* ]]; then continue; fi
+    if [[ $PYBIN == *"35"* ]]; then continue; fi
     export PATH=${PYBIN}:$ORIGINAL_PATH
     rm -rf build
     CFLAGS="-std=c++11" python setup.py bdist_wheel -d ${UNREPAIRED_WHEELS}
