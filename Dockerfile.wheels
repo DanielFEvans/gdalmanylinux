@@ -12,7 +12,7 @@ RUN sed -i 's/enabled=1/enabled=0/' /etc/yum/pluginconf.d/fastestmirror.conf \
     && sed -i 's/mirrorlist/#mirrorlist/' /etc/yum.repos.d/CentOS-Base.repo \
     && sed -i 's|#baseurl=http://mirror.centos.org/centos/$releasever|baseurl=http://vault.centos.org/5.11|' /etc/yum.repos.d/CentOS-Base.repo
 
-RUN yum update -y && yum install -y curl-devel json-c-devel zlib-devel libtiff-devel
+RUN yum update -y && yum install -y curl-devel json-c-devel zlib-devel
 
 # The venerable proc02 and proc04 support the following
 # They do not support -mavx or newer
@@ -40,6 +40,16 @@ RUN mkdir -p /src \
     && tar jxf curl-7.59.0.tar.bz2 \
     && cd /src/curl-7.59.0 \
     && LIBS=-ldl ./configure --with-ssl=/usr/local/ssl \
+    && make -j 8 \
+    && make install \
+    && rm -rf /src
+
+# Install libtiff
+RUN mkdir -p /src \
+    && cd /src \
+    && curl -f -L -O https://download.osgeo.org/libtiff/tiff-4.1.0.tar.gz \
+    && tar zxf tiff-4.1.0.tar.gz \
+    && ./configure \
     && make -j 8 \
     && make install \
     && rm -rf /src
@@ -136,8 +146,8 @@ RUN /usr/local/bin/geos-config --includes
 # gdal
 RUN mkdir -p /src \
     && cd /src \
-    && curl -f -L -O http://download.osgeo.org/gdal/3.1.0/gdal-3.1.0rc2.tar.gz \
-    && tar xzf gdal-3.1.0rc2.tar.gz \
+    && curl -f -L -O http://download.osgeo.org/gdal/3.1.0/gdal-3.1.0rc1.tar.gz \
+    && tar xzf gdal-3.1.0rc1.tar.gz \
     && cd /src/gdal-3.1.0 \
     && ./configure \
         --with-threads \
