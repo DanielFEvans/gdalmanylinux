@@ -18,7 +18,6 @@ RUN yum update -y && yum install -y curl-devel json-c-devel zlib-devel
 # They do not support -mavx or newer
 ARG CFLAGS="-O2 -Wl,-S -m64 -mmmx -msse -msse2 -msse3 -mssse3 -msse4.1 -msse4.2 -mfpmath=sse -mtune=core-avx2 -pipe"
 ARG CXXFLAGS="-O2 -Wl,-S -m64 -mmmx -msse -msse2 -msse3 -mssse3 -msse4.1 -msse4.2 -mfpmath=sse -mtune=core-avx2 -pipe"
-ARG PROJ_NETWORK="ON"
 
 # Install openssl
 RUN mkdir -p /src \
@@ -69,9 +68,9 @@ RUN mkdir -p /src \
 # proj
 RUN mkdir -p /src \
     && cd /src \
-    && curl -f -L -O http://download.osgeo.org/proj/proj-6.3.1.tar.gz \
-    && tar xzf proj-6.3.1.tar.gz \
-    && cd /src/proj-6.3.1 \
+    && curl -f -L -O http://download.osgeo.org/proj/proj-6.2.1.tar.gz \
+    && tar xzf proj-6.2.1.tar.gz \
+    && cd /src/proj-6.2.1 \
     && ./configure  \
     && make -j 8 \
     && make install \
@@ -88,9 +87,9 @@ RUN cd /usr/local/src \
 # openjpeg
 RUN mkdir -p /src \
     && cd /src \
-    && curl -f -L -O https://github.com/uclouvain/openjpeg/archive/v2.3.1.tar.gz \
-    && tar xzf v2.3.1.tar.gz \
-    && cd /src/openjpeg-2.3.1 \
+    && curl -f -L -O https://github.com/uclouvain/openjpeg/archive/v2.3.0.tar.gz \
+    && tar xzf v2.3.0.tar.gz \
+    && cd /src/openjpeg-2.3.0 \
     && mkdir -p build \
     && cd build \
     && /usr/local/cmake/bin/cmake .. -DBUILD_THIRDPARTY:BOOL=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr/local \
@@ -100,9 +99,9 @@ RUN mkdir -p /src \
 
 # hdf
 RUN cd /usr/local/src \
-    && curl -f -L -O https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.12/hdf5-1.12.0/src/hdf5-1.12.0.tar.gz \
-    && tar xzf hdf5-1.12.0.tar.gz \
-    && cd hdf5-1.12.0 \
+    && curl -f -L -O https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/hdf5-1.10.0/src/hdf5-1.10.0.tar.gz \
+    && tar xzf hdf5-1.10.0.tar.gz \
+    && cd hdf5-1.10.0 \
     && ./configure --prefix=/usr/local --enable-shared --enable-build-mode=production  \
     && make -j 8 \
     && make install
@@ -196,12 +195,12 @@ RUN for PYBIN in /opt/python/*/bin; do \
 
 # Replace SWIG's setup.py with this modified one, which gets numpy in
 # there as a dependency.
-ADD setup.py /src/gdal-3.1.0rc2/swig/python/setup.py
+ADD setup.py /src/gdal-3.1.0/swig/python/setup.py
 
 # Replace the osgeo module __init__.py with this modified one, which
 # sets the GDAL_DATA and PROJ_LIB variables on import to where they've
 # been copied to.
-ADD gdalinit.py /src/gdal-3.1.0rc2/swig/python/osgeo/__init__.py
+ADD gdalinit.py /src/gdal-3.1.0/swig/python/osgeo/__init__.py
 
 WORKDIR /io
 CMD ["/io/build-linux-wheels.sh"]

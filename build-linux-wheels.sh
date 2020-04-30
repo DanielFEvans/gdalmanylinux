@@ -12,6 +12,7 @@ source /opt/rh/devtoolset-2/enable
 pushd ${GDAL_BUILD_PATH}
 for PYBIN in /opt/python/*/bin; do
     if [[ $PYBIN == *"26"* ]]; then continue; fi
+    if [[ $PYBIN == *"27"* ]]; then continue; fi
     if [[ $PYBIN == *"33"* ]]; then continue; fi
     if [[ $PYBIN == *"34"* ]]; then continue; fi
     if [[ $PYBIN == *"35"* ]]; then continue; fi
